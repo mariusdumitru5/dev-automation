@@ -5,7 +5,7 @@ metadata:
   annotations:
     image.openshift.io/triggers: >-
         [{"from":{"kind":"ImageStreamTag","name":"backend-auth:latest"},
-          "fieldPath":"spec.template.spec.containers[?(@.name==\"backend-auth\")].image"}]
+          "fieldPath":"spec.template.spec.containers[?(@.name==\"python-backend-auth\")].image"}]
 spec:
   selector:
     matchLabels:
