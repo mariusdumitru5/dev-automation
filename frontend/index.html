@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <section aria-label="Gioco">
+    <h1>Snake</h1>
+    <div class="screen">
+      <div class="stage">
+        <div class="hud">
+          <span>Punti <span id="score">0</span></span>
+          <span class="hud-mode" id="hud-mode">Classica</span>
+          <span>Record <span id="best">0</span></span>
+        </div>
+        <canvas id="board" width="432" height="432" aria-label="Campo di gioco"></canvas>
+
+        <div class="menu" id="menu">
+          <div class="menu-scroll">
+            <div class="menu-inner">
+              <div class="menu-result" id="menu-result" hidden>
+                <span id="result-icon"></span>
+                <p class="result-title" id="result-title"></p>
+                <p class="result-line" id="result-line"></p>
+              </div>
+              <p class="menu-title">Scegli la partita</p>
+              <div class="menu-options" role="radiogroup" aria-label="Tipo di partita">
+                <label class="menu-option">
+                  <input type="radio" name="type" value="normale">
+                  <span class="opt"><b>Normale</b><small>Scegli tu le impostazioni. Vale per il record.</small></span>
+                </label>
+                <label class="menu-option">
+                  <input type="radio" name="type" value="classificata" id="type-ranked">
+                  <span class="opt"><b>Classificata</b><small id="ranked-sub">Sempre Caos, il resto a caso. Cambia il rank.</small></span>
+                </label>
+              </div>
+
+              <fieldset class="menu-normal" id="settings-fields">
+                <legend class="sr-only">Impostazioni della partita normale</legend>
+                <div class="setting">
+                  <span class="setting-name" id="lbl-color">Serpente</span>
+                  <div class="choices" role="radiogroup" aria-labelledby="lbl-color" id="choices-color"></div>
+                </div>
+                <div class="setting">
+                  <span class="setting-name" id="lbl-food">Cibo</span>
+                  <div class="choices" role="radiogroup" aria-labelledby="lbl-food" id="choices-food"></div>
+                </div>
+                <div class="setting">
+                  <span class="setting-name" id="lbl-count">Cibo in campo</span>
+                  <div class="choices" role="radiogroup" aria-labelledby="lbl-count" id="choices-count"></div>
+                </div>
+                <div class="setting">
+                  <span class="setting-name" id="lbl-size">Mappa</span>
+                  <div class="choices" role="radiogroup" aria-labelledby="lbl-size" id="choices-size"></div>
+                </div>
+                <div class="setting">
+                  <span class="setting-name" id="lbl-speed">Velocità</span>
+                  <div class="choices" role="radiogroup" aria-labelledby="lbl-speed" id="choices-speed"></div>
+                </div>
+                <div class="setting">
+                  <span class="setting-name" id="lbl-mode">Modalità</span>
+                  <div class="choices" role="radiogroup" aria-labelledby="lbl-mode" id="choices-mode"></div>
+                  <p class="mode-desc" id="mode-desc"></p>
+                </div>
+                <div class="shuffle">
+                  <button type="button" class="quiet" id="shuffle">Mescola tutto</button>
+                  <label class="check"><input type="checkbox" id="shuffle-each"> Casuale a ogni partita</label>
+                </div>
+              </fieldset>
+
+              <div class="menu-ranked" id="menu-ranked" hidden>
+                <span id="menu-rank-icon"></span>
+                <p class="menu-rank-name" id="menu-rank-name"></p>
+                <p class="menu-mult"><small>Difficoltà</small><strong id="menu-mult">×?</strong></p>
+                <p class="menu-goal" id="menu-goal"></p>
+                <p class="draw-title">Estratte dal server per questa partita</p>
+                <div class="draw" id="draw"></div>
+              </div>
+            </div>
+          </div>
+          <div class="menu-footer">
+            <button class="play" id="play">Gioca</button>
+          </div>
+        </div>
+      </div>
+      <div class="goal" id="goal" hidden aria-live="polite">
+        <span class="goal-label" id="goal-label">Obiettivo</span>
+        <span class="goal-value"><span id="goal-done">0</span> / <span id="goal-target">0</span></span>
+        <span class="goal-mult" id="goal-mult">×1</span>
+      </div>
+      <p class="screen-msg" id="screen-msg" aria-live="polite">Scegli la partita e premi Gioca.</p>
+    </div>
+    <div class="controls">
+      <button id="pause" class="is-idle">Pausa</button>
+    </div>
+    <p class="hint">Frecce o W A S D per muoverti, Spazio per giocare e mettere in pausa. Sul telefono scorri il dito sul campo.</p>
+  </section>
+
+  <aside>
+    <section id="account" aria-label="Account">
+      <div id="logged-out">
+        <h2 id="form-title">Accedi</h2>
+        <form id="auth-form" novalidate>
+          <div id="register-fields" hidden>
+            <div class="pair">
+              <label>Nome
+                <input id="nome" autocomplete="given-name">
+              </label>
+              <label>Cognome
+                <input id="cognome" autocomplete="family-name">
+              </label>
+            </div>
+            <label>Email
+              <input id="email" type="email" autocomplete="email">
+            </label>
+          </div>
+          <label>Nome utente
+            <input id="username" autocomplete="username">
+          </label>
+          <label>Password
+            <input id="password" type="password" autocomplete="current-password">
+          </label>
+          <p class="error" id="auth-error" aria-live="polite"></p>
+          <button type="submit" id="submit">Accedi</button>
+        </form>
+        <p class="hint">
+          <span id="switch-text">Non hai un account?</span>
+          <button type="button" class="link" id="switch-mode">Creane uno</button>
+        </p>
+        <p class="hint">Puoi giocare anche senza account, ma la partita viene salvata solo dopo l'accesso.</p>
+      </div>
+      <div id="logged-in" hidden>
+        <h2 id="full-name"></h2>
+        <p class="who"><span id="who"></span> <span class="muted" id="who-email"></span></p>
+        <div class="rank-card">
+          <span id="rank-icon"></span>
+          <p class="rank-name" id="rank-name">Bronzo</p>
+          <p class="rank-points" id="rank-points">0 punti rank</p>
+          <div class="rank-bar" aria-hidden="true"><span id="rank-fill"></span></div>
+          <p class="rank-next" id="rank-next"></p>
+        </div>
+        <dl class="stats">
+          <div><dt>Partite giocate</dt><dd id="stat-games">0</dd></div>
+          <div><dt>Record</dt><dd id="stat-best">0</dd></div>
+          <div><dt>Ultima partita</dt><dd id="stat-last">0</dd></div>
+        </dl>
+        <button class="quiet" id="logout">Esci</button>
+      </div>
+    </section>
+
+    <section aria-label="Classifica">
+      <h2>Classifica</h2>
+      <div class="tabs" role="tablist" aria-label="Tipo di classifica">
+        <button class="tab" role="tab" data-board="ranked" aria-selected="true">Classificata</button>
+        <button class="tab" role="tab" data-board="record" aria-selected="false">Record</button>
+      </div>
+      <ol id="leaderboard"></ol>
+      <p class="empty" id="leaderboard-empty"></p>
+      <p class="hint" id="board-note"></p>
+    </section>
+  </aside>
+</main>
+
+<script src="index.js" defer></script>
+</body>
+</html>
