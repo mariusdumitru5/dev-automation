@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: frontend-assets
+    files:
+      - ../frontend/index.html
+      - ../frontend/style.css
+      - ../frontend/index.js
+      - ../frontend/default.conf
+     
+# Risorse da applicare
+resources:
+  - 01-frontend-deployment.yaml

@@ -18,6 +18,9 @@ pipeline {
                     # Selezione del namespace
                     oc project ${PROJECT_NAME}
 
+                    # Applica i manifest della cartella openshift
+                    oc apply -f openshift/
+
                     # Verifica dei Pods attualmente attivi nel namespace
                     echo "--- Lista Pods attivi ---"
                     oc get pods
