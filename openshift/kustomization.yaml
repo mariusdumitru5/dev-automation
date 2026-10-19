@@ -4,10 +4,10 @@ kind: Kustomization
 configMapGenerator:
   - name: frontend-assets
     files:
-      - index.html
-      - style.css
-      - index.js
-      - default.conf
+      - ../frontend/index.html
+      - ../frontend/style.css
+      - ../frontend/index.js
+      - ../frontend/default.conf
      
 # Risorse da applicare
 resources:

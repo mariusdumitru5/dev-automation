@@ -27,7 +27,7 @@ pipeline {
                     oc apply -f "$REDIS_PASSWORD"
 
                     # Applica i manifest della cartella openshift
-                    oc apply -k openshift/ --kustomize="--load-restrictor LoadRestrictionsNone"
+                    oc apply -k openshift/ --load-restrictor=LoadRestrictionsNone
 
                     # Verifica dei Pods attualmente attivi nel namespace
                     echo "--- Lista Pods attivi ---"
