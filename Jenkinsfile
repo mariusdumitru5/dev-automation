@@ -9,8 +9,13 @@ pipeline {
     stages {
         stage('Login & Test OpenShift') {
             steps {
+
+
                 // Legge il token salvato nelle credenziali usando l'ID 'openshift-sa-token'
-                withCredentials([string(credentialsId: 'openshift-sa-token', variable: 'OC_TOKEN')]) {
+                withCredentials([
+                    string(credentialsId: 'openshift-sa-token', variable: 'OC_TOKEN'),
+                    file(credentialsId: 'redis-password', variable: 'REDIS_PASSWORD')
+                    ]) {
                     sh '''
                     # Login al cluster
                     oc login ${CLUSTER_URL} --token=${OC_TOKEN} --insecure-skip-tls-verify=true
@@ -18,8 +23,11 @@ pipeline {
                     # Selezione del namespace
                     oc project ${PROJECT_NAME}
 
+                    # Applica il secret di redis
+                    oc apply -f "$REDIS_PASSWORD"
+
                     # Applica i manifest della cartella openshift
-                    oc apply -f openshift/
+                    oc apply -k openshift/
 
                     # Verifica dei Pods attualmente attivi nel namespace
                     echo "--- Lista Pods attivi ---"
