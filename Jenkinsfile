@@ -26,8 +26,11 @@ pipeline {
                     # Applica il secret di redis
                     oc apply -f "$REDIS_PASSWORD"
 
+                    # Applica i manifest della cartella frontend
+                    oc apply -k frontend/
+
                     # Applica i manifest della cartella openshift
-                    oc apply -k openshift/
+                    oc apply -f openshift/
 
                     # Verifica dei Pods attualmente attivi nel namespace
                     echo "--- Lista Pods attivi ---"
