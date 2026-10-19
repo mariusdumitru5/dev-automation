@@ -6,6 +6,10 @@ pipeline {
         PROJECT_NAME = 'dev-automation'
     }
 
+    triggers {
+        pollSCM('H * * * *')
+    }
+
     stages {
         stage('Login & Test OpenShift') {
             steps {
