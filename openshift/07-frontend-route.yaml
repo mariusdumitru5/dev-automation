@@ -7,7 +7,7 @@ metadata:
 spec:
   to:
     kind: Service
-    name: frontend
+    name: frontend-service
   port:
     targetPort: 8080
   tls:
