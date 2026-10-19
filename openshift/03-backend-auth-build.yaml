@@ -1,0 +1,46 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: backend-auth
+  labels:
+    app: backend-auth
+spec:
+  lookupPolicy:
+    local: true
+
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: backend-auth
+  labels:
+    app: backend-auth
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/mariusdumitru5/dev-automation
+      ref: main
+    contextDir: backend-auth            # sottocartella se il backend non è nella root
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: openshift
+        name: python:3.11-ubi9   # verificate i tag con: oc get is python -n openshift
+      env:
+        - name: APP_MODULE
+          value: "app:application"  # modulo per gunicorn
+  output:
+    to:
+      kind: ImageStreamTag
+      name: backend-auth:latest
+  triggers:
+    - type: ConfigChange       # build alla creazione/modifica della BC
+    - type: ImageChange        # rebuild se si aggiorna l'immagine base Python
+      imageChange: {}
+  runPolicy: Serial
+  resources:
+    limits:
+      memory: 1Gi

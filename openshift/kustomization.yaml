@@ -16,3 +16,4 @@ configMapGenerator:
 resources:
   - 01-frontend-deployment.yaml
   - 02-redis-statefulset.yaml
+  - 03-backend-auth-build.yaml
