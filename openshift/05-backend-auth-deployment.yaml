@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-auth
+spec:
+  selector:
+    matchLabels:
+      app: backend-auth
+  template:
+    metadata:
+      labels:
+        app: backend-auth
+    spec:
+      containers:
+      - name: python-backend-auth
+        image: backend-auth:latest
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      envFrom: 
+        - configMapRef:
+            name: backend-conf 
+        - secretRef: 
+            name: redis-password
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-auth-service
+spec:
+  type: ClusterIP
+  selector:
+    app:  backend-auth
+  ports:
+  - port: 8080
+    targetPort: 8080

@@ -11,9 +11,21 @@ configMapGenerator:
       - ../frontend/style.css
       - ../frontend/index.js
       - ../frontend/default.conf
-     
+  - name: backend-conf
+    literals:
+      - REDIS_HOST=redis-service
+      - REDIS_PORT=6379
+      - TOKEN_TTL=3600
+  - name: backend-snake
+    literals:
+      - AUTH_URL=http://backend-auth-service:8080
+
 # Risorse da applicare
 resources:
   - 01-frontend-deployment.yaml
   - 02-redis-statefulset.yaml
   - 03-backend-auth-build.yaml
+  - 04-backend-snake-build.yaml
+  - 05-backend-auth-deployment.yaml
+  - 06-backend-snake-deployment.yaml
+  - 07-frontend-route.yaml

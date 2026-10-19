@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-snake
+spec:
+  selector:
+    matchLabels:
+      app: backend-snake
+  template:
+    metadata:
+      labels:
+        app: backend-snake
+    spec:
+      containers:
+      - name: python-backend-snake
+        image: backend-snake:latest
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      envFrom: 
+        - configMapRef:
+            name: backend-conf 
+        - configMapRef:
+            name: backend-snake
+        - secretRef: 
+            name: redis-password
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-snake-service
+spec:
+  type: ClusterIP
+  selector:
+    app:  backend-snake
+  ports:
+  - port: 8080
+    targetPort: 8080
