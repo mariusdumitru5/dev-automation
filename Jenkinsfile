@@ -21,11 +21,6 @@ pipeline {
                     # Selezione del namespace
                     oc project ${PROJECT_NAME}
 
-                    # Intall del controller per il rollout automatico dei pod 
-                    helm repo add stakater https://stakater.github.io/stakater-charts
-                    helm repo update
-                    helm upgrade --install reloader stakater/reloader --set reloader.watchGlobally=false --set reloader.deployment.securityContext.runAsUser=null
-
                     # Applica il secret di redis
                     oc apply -f "$REDIS_PASSWORD"
 
