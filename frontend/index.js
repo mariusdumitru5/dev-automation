@@ -925,4 +925,3 @@ setPlayType(playType === "classificata" && loggedIn ? "classificata" : "normale"
 }
 
 init().then(() => { showAccount(); loadLeaderboard(); });
-Z
