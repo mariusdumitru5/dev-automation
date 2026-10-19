@@ -2,6 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-snake
+  annotations:
+    image.openshift.io/triggers: >-
+        [{"from":{"kind":"ImageStreamTag","name":"backend-snake:latest"},
+          "fieldPath":"spec.template.spec.containers[?(@.name==\"backend-snake\")].image"}]
 spec:
   selector:
     matchLabels:
