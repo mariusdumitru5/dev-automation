@@ -75,7 +75,7 @@ if (!loggedIn) nextMatch = null;
 if (!loggedIn && playType === "classificata" && state === "idle") setPlayType("normale");
 if (!loggedIn) return;
 try {
-    showProfile(await api("/api/auth/me"));
+    showProfile(await api("/api/backend-auth-service/me"));
 } catch (err) {
     sessionStorage.clear();
     $("logged-out").hidden = false;
@@ -90,12 +90,12 @@ authError.textContent = "";
 const credentials = { username: field("username"), password: field("password") };
 try {
     if (authMode === "register") {
-    await api("/api/auth/register", {
+    await api("/api/backend-auth-service/register", {
         method: "POST",
         body: JSON.stringify({ ...credentials, nome: field("nome"), cognome: field("cognome"), email: field("email") }),
     });
     }
-    const result = await api("/api/auth/login", { method: "POST", body: JSON.stringify(credentials) });
+    const result = await api("/api/backend-auth-service/login", { method: "POST", body: JSON.stringify(credentials) });
     sessionStorage.setItem("token", result.token);
     form.reset();
     setAuthMode("login");
@@ -106,7 +106,7 @@ try {
 });
 
 $("logout").addEventListener("click", async () => {
-try { await api("/api/auth/logout", { method: "POST" }); } catch (e) { /* esce comunque */ }
+try { await api("/api/backend-auth-service/logout", { method: "POST" }); } catch (e) { /* esce comunque */ }
 sessionStorage.clear();
 best = 0;
 $("best").textContent = 0;
@@ -125,7 +125,7 @@ const list = $("leaderboard");
 const empty = $("leaderboard-empty");
 $("board-note").textContent = BOARD_TEXT[board].note;
 try {
-    const rows = await api("/api/snake/leaderboard?type=" + board);
+    const rows = await api("/api/backend-snake-service/leaderboard?type=" + board);
     list.innerHTML = "";
     rows.forEach((row) => {
     const li = document.createElement("li");
@@ -436,7 +436,7 @@ updateGoal();
 async function loadNextMatch() {
 if (!sessionStorage.getItem("token")) return;
 try {
-    nextMatch = await api("/api/snake/ranked/next", { method: "POST" });
+    nextMatch = await api("/api/backend-snake-service/ranked/next", { method: "POST" });
 } catch (err) {
     nextMatch = null;
     say("Classificata non disponibile: " + err.message);
@@ -725,8 +725,8 @@ if (playType === "classificata") {
     updateButton();
     say("Avvio della partita classificata…");
     try {
-    if (!nextMatch) nextMatch = await api("/api/snake/ranked/next", { method: "POST" });
-    match = await api("/api/snake/ranked/start", {
+    if (!nextMatch) nextMatch = await api("/api/backend-snake-service/ranked/next", { method: "POST" });
+    match = await api("/api/backend-snake-service/ranked/start", {
         method: "POST",
         body: JSON.stringify({ match_id: nextMatch.match_id }),
     });
@@ -818,7 +818,7 @@ const title = won ? "Campo pieno!" : "Partita finita";
 if (match) {
     const current = match;
     try {
-    const r = await api("/api/snake/ranked/finish", {
+    const r = await api("/api/backend-snake-service/ranked/finish", {
         method: "POST",
         body: JSON.stringify({ match_id: current.match_id, score }),
     });
@@ -840,7 +840,7 @@ if (match) {
     showMenu(true);
     // nel menu compare la prossima estrazione; il campo mostra ancora la partita appena finita
     nextMatch = null;
-    try { nextMatch = await api("/api/snake/ranked/next", { method: "POST" }); } catch (e) { /* riproverà a Gioca */ }
+    try { nextMatch = await api("/api/backend-snake-service/ranked/next", { method: "POST" }); } catch (e) { /* riproverà a Gioca */ }
     updateMenu();
     return;
 }
@@ -852,7 +852,7 @@ if (!sessionStorage.getItem("token")) {
     return;
 }
 try {
-    const result = await api("/api/snake/score", { method: "POST", body: JSON.stringify({ score }) });
+    const result = await api("/api/backend-snake-service/score", { method: "POST", body: JSON.stringify({ score }) });
     say(head + score + " punti, partita " + result.games_played + " salvata. Record " + result.best + ".");
     showResult(title, score + " punti. Il tuo record è " + result.best + ".", null);
     loadLeaderboard();
@@ -911,7 +911,7 @@ async function init() {
 buildChoices();
 const hasSaved = loadSaved();
 try {
-    const cfg = await api("/api/snake/config");
+    const cfg = await api("/api/backend-snake-service/config");
     if (Array.isArray(cfg.ranks) && cfg.ranks.length) RANKS = cfg.ranks;
     if (!hasSaved) {                    // i valori della ConfigMap-snake scelgono le impostazioni iniziali
     prefs.size = nearest("size", cfg.grid_size);
