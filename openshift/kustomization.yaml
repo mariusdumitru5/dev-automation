@@ -29,3 +29,5 @@ resources:
   - 05-backend-auth-deployment.yaml
   - 06-backend-snake-deployment.yaml
   - 07-frontend-route.yaml
+  - 08-frontend-hpa.yaml
+  - 09-network-policy.yaml
