@@ -21,13 +21,13 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
-      envFrom: 
-        - configMapRef:
-            name: backend-conf 
-        - configMapRef:
-            name: backend-snake
-        - secretRef: 
-            name: redis-password
+        envFrom: 
+          - configMapRef:
+              name: backend-conf 
+          - configMapRef:
+              name: backend-snake
+          - secretRef: 
+              name: redis-password
 --- 
 apiVersion: v1
 kind: Service
