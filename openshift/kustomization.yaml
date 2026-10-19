@@ -11,4 +11,4 @@ configMapGenerator:
      
 # Risorse da applicare
 resources:
-  - ../openshift/01-frontend-deployment.yaml
+  - 01-frontend-deployment.yaml
