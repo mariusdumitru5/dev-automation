@@ -54,7 +54,7 @@ SPEED_MS = int(os.environ.get("SPEED_MS", "120"))
 MAX_GRID_SIZE = int(os.environ.get("MAX_GRID_SIZE", "30"))
 
 db = redis.Redis(
-    host=os.environ.get("REDIS_HOST", "redis"),
+    host=os.environ.get("REDIS_HOST", "redis-service"),
     port=int(os.environ.get("REDIS_PORT", "6379")),
     password=os.environ.get("REDIS_PASSWORD"),
     decode_responses=True,

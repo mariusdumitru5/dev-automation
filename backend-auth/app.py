@@ -31,7 +31,7 @@ EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 USERNAME_RE = re.compile(r"^[A-Za-z0-9_.-]{3,30}$")
 
 db = redis.Redis(
-    host=os.environ.get("REDIS_HOST", "redis"),
+    host=os.environ.get("REDIS_HOST", "redis-service"),
     port=int(os.environ.get("REDIS_PORT", "6379")),
     password=os.environ.get("REDIS_PASSWORD"),
     decode_responses=True,
