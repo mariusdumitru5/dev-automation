@@ -1,6 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+generatorOptions:
+  disableNameSuffixHash: true
+
 configMapGenerator:
   - name: frontend-assets
     files:
@@ -12,3 +15,4 @@ configMapGenerator:
 # Risorse da applicare
 resources:
   - 01-frontend-deployment.yaml
+  - 02-redis-statefulset.yaml
