@@ -9,8 +9,6 @@ pipeline {
     stages {
         stage('Login & Test OpenShift') {
             steps {
-
-
                 // Legge il token salvato nelle credenziali usando l'ID 'openshift-sa-token'
                 withCredentials([
                     string(credentialsId: 'openshift-sa-token', variable: 'OC_TOKEN'),
@@ -28,6 +26,9 @@ pipeline {
 
                     # Applica i manifest della cartella openshift
                     oc kustomize openshift/ --load-restrictor LoadRestrictionsNone | oc apply -f -
+
+                    #  Elimino pod temporanei 
+                    oc delete pod -l openshift.io/build.name --field-selector=status.phase==Succeeded
 
                     # Verifica dei Pods attualmente attivi nel namespace
                     echo "--- Lista Pods attivi ---"
